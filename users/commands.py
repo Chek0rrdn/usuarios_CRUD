@@ -1,3 +1,4 @@
+from os import name
 import click
 from tabulate import tabulate
 
@@ -53,19 +54,7 @@ def list(ctx):
     user_service = UserService(ctx.obj['users_table'])
     users_list = user_service.list_users()
 
-    headers = [field.capitalize() for field in User.schema()]
-    table = []
-
-    for user in users_list:
-        table.append([
-            user['name'],
-            user['company'],
-            user['email'],
-            user['position'],
-            user['uid']
-        ])
-    
-    click.echo(tabulate(table, headers=headers))
+    click.echo(tabulate(users_list, headers='keys', tablefmt='fancy_grid'))
 
 
 @users.command()
