@@ -1,1 +1,0 @@
-Requirement already satisfied: tabulate in ./venv/lib/python3.8/site-packages (0.8.9)
