@@ -38,7 +38,7 @@ def clients():
 )
 @click.pass_context
 def create(ctx, name, company, email, position):
-    """     Creates a New Client    """
+    """     Crea un Nuevo Cliente    """
     cliente = Client(name, company, email, position)
     client_service = ClientService(ctx.obj['clients_table'])
 
@@ -48,7 +48,7 @@ def create(ctx, name, company, email, position):
 @clients.command()
 @click.pass_context
 def list(ctx):
-    """    List all clients    """
+    """    Lista todos clientes    """
     client_service = ClientService(ctx.obj['clients_table'])
     clients_list = client_service.list_clients()
 
@@ -68,10 +68,33 @@ def list(ctx):
 
 
 @clients.command()
+@click.argument('client_uid', type=str)
 @click.pass_context
 def update(ctx, client_uid):
-    """    update a client    """
-    pass
+    """    Actualiza un cliente    """
+    client_service = ClientService(ctx.obj['clients_table'])
+    clients_list = client_service.list_clients()
+
+    client = [client for client in clients_list if client['uid'] == client_uid]
+
+    if client:
+        client = _update_client_flow(Client(**client[0]))
+        client_service.update_client(client)
+
+        click.echo('Cliente Actualizado')
+    else:
+        click.echo('Cliente no Encontrado')
+
+
+def _update_client_flow(client):
+    click.echo('Deje vacio si usted no desea modificar el valor')
+
+    client.name = click.prompt('Nuevo Nombre', type=str, default=client.name)
+    client.company = click.prompt('Nueva Compania', type=str, default=client.company)
+    client.email = click.prompt('Nuevo Email', type=str, default=client.email)
+    client.position = click.prompt('Nueva Posicion', type=str, default=client.position)
+
+    return client
 
 
 @clients.command()
