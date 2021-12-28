@@ -1,6 +1,6 @@
 import uuid
 
-class Client:
+class User:
     def __init__(self, name, company, email, position, uid=None):
         self.name = name,
         self.company = company,
